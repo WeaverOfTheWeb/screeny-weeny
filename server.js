@@ -31,4 +31,4 @@ http.createServer(async function (req, res) {
 	}
 
 	res.end();
-}).listen(3131);
+}).listen(process.env.PORT || 1337);
