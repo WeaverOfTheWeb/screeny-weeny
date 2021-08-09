@@ -10,15 +10,20 @@ http.createServer(async function (req, res) {
 			const buffer = await screenshot({
 				height: queryObject.height,
 				width: queryObject.width,
-				url: queryObject.url
+				url: queryObject.url,
+				format: queryObject.format,
 			});
 
 			res.writeHead(
 				200,
 				{ "Content-Type": "text/html" }
 			);
-
-			res.write(`<img src="data:image/png;base64,${buffer.toString("base64")}" />`);
+			
+			if (queryObject.format === 'jpeg') {
+				res.write(`<img src="data:image/jpeg;base64,${buffer.toString("base64")}" />`);
+			} else {
+				res.write(`<img src="data:image/png;base64,${buffer.toString("base64")}" />`);
+			}
 		} catch (e) {
 			res.writeHead(
 				500,
