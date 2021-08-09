@@ -7,28 +7,35 @@ http.createServer(async function (req, res) {
 
 	if (queryObject.url && queryObject.height && queryObject.width) {
 		try {
-			const buffer = await screenshot({
+			const screenshotData = await screenshot({
 				height: queryObject.height,
 				width: queryObject.width,
 				url: queryObject.url,
 				format: queryObject.format,
 			});
 
-			res.writeHead(
-				200,
-				{ "Content-Type": "text/html" }
-			);
-			
-			if (queryObject.format === 'jpeg') {
-				res.write(`<img src="data:image/jpeg;base64,${buffer.toString("base64")}" />`);
+			if (queryObject.output === "binary") {
+				res.writeHead(200, {
+					"Content-Type": `image/${queryObject.format || "png"}`,
+					"Content-disposition": `attachment;filename=${url
+						.parse(queryObject.url, true)
+						.hostname.replaceAll(".", "_")}.${
+						queryObject.format || "png"
+					}`,
+					"Content-Length": screenshotData.length,
+				});
+				res.end(Buffer.from(screenshotData, "binary"));
 			} else {
-				res.write(`<img src="data:image/png;base64,${buffer.toString("base64")}" />`);
+				res.writeHead(200, { "Content-Type": "text/html" });
+
+				res.write(
+					`<img src="data:image/${
+						queryObject.format || "png"
+					};base64,${screenshotData.toString("base64")}" />`
+				);
 			}
 		} catch (e) {
-			res.writeHead(
-				500,
-				{ "Content-Type": "text/html" }
-			);
+			res.writeHead(500, { "Content-Type": "text/html" });
 			res.write(`${e}`);
 		}
 	} else {
