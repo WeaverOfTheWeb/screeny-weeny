@@ -19,7 +19,7 @@ http.createServer(async function (req, res) {
 					"Content-Type": `image/${queryObject.format || "png"}`,
 					"Content-disposition": `attachment;filename=${url
 						.parse(queryObject.url, true)
-						.hostname.replaceAll(".", "_")}.${
+						.hostname.replace(/\./g, "_")}.${
 						queryObject.format || "png"
 					}`,
 					"Content-Length": screenshotData.length,
