@@ -25,6 +25,7 @@ module.exports = function ({ url, height, width, format }) {
 
 			const buffer = await page.screenshot({
 				fullPage: false,
+				quality: 70,
 				type: format || "png",
 			});
 
