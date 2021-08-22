@@ -23,11 +23,15 @@ module.exports = function ({ url, height, width, format, quality }) {
 				waitUntil: ["load", "networkidle0", "domcontentloaded"],
 			});
 
-			const buffer = await page.screenshot({
-				fullPage: false,
-				quality: parseInt(quality) || 80,
-				type: format || "png",
-			});
+			const options = {};
+			options.fullPage = false;
+			options.type = "png";
+			if (format === "jpeg") {
+				option.quality = parseInt(quality) || 80;
+				options.type = format;
+			}
+
+			const buffer = await page.screenshot(options);
 
 			await browser.close();
 
