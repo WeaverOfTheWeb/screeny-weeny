@@ -12,6 +12,7 @@ http.createServer(async function (req, res) {
 				width: queryObject.width,
 				url: queryObject.url,
 				format: queryObject.format,
+				quality: queryObject.quality,
 			});
 
 			if (queryObject.output === "binary") {

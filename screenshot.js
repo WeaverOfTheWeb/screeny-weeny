@@ -1,6 +1,6 @@
 const puppeteer = require("puppeteer");
 
-module.exports = function ({ url, height, width, format }) {
+module.exports = function ({ url, height, width, format, quality }) {
 	return new Promise((resolve, reject) => {
 		(async () => {
 			const browser = await puppeteer.launch({
@@ -25,7 +25,7 @@ module.exports = function ({ url, height, width, format }) {
 
 			const buffer = await page.screenshot({
 				fullPage: false,
-				quality: 80,
+				quality: quality || 80,
 				type: format || "png",
 			});
 
